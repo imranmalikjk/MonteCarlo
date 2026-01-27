@@ -83,7 +83,7 @@ class BootstrapStandardError:
         """
         B = len(beta1_boot)
         mean = np.mean(beta1_boot)
-        se = np.sqrt(np.sum(beta1_boot - mean)**2 / (B-1))
+        se = np.sqrt(np.sum((beta1_boot - mean)**2) / (B - 1))
         return se
     
     def _bootstrap_beta(self, D:pd.DataFrame, B:int) -> Tuple[float, float, np.ndarray]:
@@ -147,16 +147,11 @@ def get_bootstrap(beta0:int, beta1:int, sigma:int, N:int, B:int, useParallelism:
     data = bs._simulate_data()
 
     print("Dataset head:")
-    print(data)
-
-    beta_hat = bs._estimate_beta(data)
-    print("OLS estimate: ", beta_hat)
+    print(data.head())
 
     if useParallelism: 
         beta1_hat, se_boot, beta1_boot = bs._bootstrap_beta_parallel(data, B)
     else:
         beta1_hat, se_boot, beta1_boot = bs._bootstrap_beta(data, B)
 
-    print("Bootstrap slope: ", beta1_hat)
-    print("Bootstrap SE: ", se_boot)
-    print("beta1_boot", beta1_boot)
+    return beta1_hat, se_boot, beta1_boot
