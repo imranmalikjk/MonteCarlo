@@ -26,12 +26,12 @@ def test_init_invalid_beta1():
 
 
 def test_init_invalid_sigma_negative():
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         BootstrapStandardError(1, 2, -1, 100)
 
 
 def test_init_invalid_sigma_zero():
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         BootstrapStandardError(1, 2, 0, 100)
 
 
@@ -41,5 +41,5 @@ def test_init_invalid_sigma_type():
 
 
 def test_init_invalid_N():
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         BootstrapStandardError(1, 2, 1, 1)
