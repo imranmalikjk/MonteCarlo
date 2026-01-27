@@ -43,3 +43,27 @@ def test_init_invalid_sigma_type():
 def test_init_invalid_N():
     with pytest.raises(ValueError):
         BootstrapStandardError(1, 2, 1, 1)
+
+#_check_dataset
+
+def test_check_dataset_not_dataframe():
+    bs = BootstrapStandardError(1, 2, 1, 100)
+    with pytest.raises(TypeError):
+        bs._check_dataset([1, 2, 3])
+
+
+def test_check_dataset_missing_columns():
+    bs = BootstrapStandardError(1, 2, 1, 10)
+    D = pd.DataFrame({"x": [0,1,2,3,4,5]})
+    with pytest.raises(ValueError):
+        bs._check_dataset(D)
+
+
+def test_check_dataset_valid():
+    bs = BootstrapStandardError(1, 2, 1, 10)
+    D = pd.DataFrame({
+        "x": np.random.randn(10),
+        "y": np.random.randn(10)
+    })
+    # ne doit pas lever d'exception
+    bs._check_dataset(D)
