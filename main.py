@@ -13,7 +13,7 @@ def run(json_input):
     B = args.get('B',1000)
     useParallelism = args.get('useParallelism', False)
 
-    get_bootstrap(
+    beta1_hat, se_boot, beta1_boot = get_bootstrap(
         beta0=beta0,
         beta1=beta1,
         sigma=sigma,
@@ -21,6 +21,10 @@ def run(json_input):
         B=B,
         useParallelism=useParallelism
     )
+
+    print("OLS estimate: : ", beta1_hat)
+    print("Bootstrap SE: ", se_boot)
+    print("beta1_boot", beta1_boot)
 
 if __name__ == "__main__":
     run(
@@ -31,7 +35,7 @@ if __name__ == "__main__":
                 "sigma": 1,
                 "N": 10000,
                 "B": 1000,
-                "useParallelism":False
+                "useParallelism":True
             }
         )
     )

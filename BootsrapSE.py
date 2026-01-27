@@ -23,6 +23,8 @@ class BootstrapStandardError:
 
     @staticmethod
     def _validate_params(beta0, beta1, sigma, N):
+        """Check the parameters given by the user
+        """
 
         if not isinstance(beta0, (int, float)):
             raise TypeError('beta0 should be a numeric value')
@@ -120,7 +122,7 @@ class BootstrapStandardError:
 
         return beta1_hat, se_boot, beta1_boot
     
-    def single_bootstrap(self,D,b):
+    def single_bootstrap(self,D):
         idx = np.random.choice(len(D),len(D),replace=True)
         D_b = D.iloc[idx, :]
         return self._estimate_beta(D_b)[1]
@@ -140,7 +142,7 @@ class BootstrapStandardError:
 
         beta1_hat = self._estimate_beta(D)[1]
 
-        beta1_boot = Parallel(n_jobs=-1)(delayed(self.single_bootstrap)(D, b) for b in range(B))
+        beta1_boot = Parallel(n_jobs=-1)(delayed(self.single_bootstrap)(D) for _ in range(B))
 
         beta1_boot = np.array(beta1_boot)
         se_boot = self._compute_se(beta1_boot)
