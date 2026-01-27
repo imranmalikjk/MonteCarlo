@@ -15,20 +15,28 @@ class BootstrapStandardError:
             N (int): Number of Observations to draw
 
         """
-        if not isinstance(beta0, (int, float)):
-            raise TypeError('beta0 should be a numeric value')
-        if not isinstance(beta1, (int, float)):
-            raise TypeError('beta1 should be a numeric value')
-        if not isinstance(sigma, (int, float)) or sigma<= 0:
-            raise TypeError('sigma should be a positive number')
-        if not isinstance(N, int) or N <=1:
-            raise TypeError('N shuld be an interger greater than 1')
-
+        self._validate_params(beta0, beta1, sigma, N)
         self.beta0 = beta0
         self.beta1 = beta1
         self.sigma = sigma
         self.N = N
 
+    @staticmethod
+    def _validate_params(beta0, beta1, sigma, N):
+
+        if not isinstance(beta0, (int, float)):
+            raise TypeError('beta0 should be a numeric value')
+        if not isinstance(beta1, (int, float)):
+            raise TypeError('beta1 should be a numeric value')
+        if not isinstance(sigma, (int, float)):
+            raise TypeError("sigma must be numeric")
+        elif sigma <= 0:
+            raise ValueError("sigma must be strictly positive")
+        if not isinstance(N, int):
+            raise TypeError("N must be an integer")
+        elif N <= 1:
+            raise ValueError("N must be greater than 1")
+        
     def _check_dataset(self, D:pd.DataFrame):
         """Check is the DataFrame is correctly formatted
 
