@@ -32,11 +32,11 @@ class BootstrapStandardError:
             raise TypeError('beta1 should be a numeric value')
         if not isinstance(sigma, (int, float)):
             raise TypeError("sigma must be numeric")
-        elif sigma <= 0:
+        if sigma <= 0:
             raise ValueError("sigma must be strictly positive")
         if not isinstance(N, int):
             raise TypeError("N must be an integer")
-        elif N <= 1:
+        if N <= 1:
             raise ValueError("N must be greater than 1")
         
     def _check_dataset(self, D:pd.DataFrame):
@@ -150,7 +150,7 @@ class BootstrapStandardError:
         return beta1_hat, se_boot, beta1_boot
 
     
-def get_bootstrap(beta0:int, beta1:int, sigma:int, N:int, B:int, useParallelism:bool=False):
+def get_bootstrap(beta0:float, beta1:float, sigma:float, N:int, B:int, useParallelism:bool=False):
 
     bs = BootstrapStandardError(beta0, beta1, sigma, N)
 
