@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
 import logging
-logging.basicConfig( level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s" ) 
-logger = logging.getLogger(__name__)
+
 from typing import Tuple
 from joblib import Parallel, delayed
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s" ) 
+logger = logging.getLogger(__name__)
 
 class BootstrapStandardError:
 
@@ -151,17 +153,17 @@ class BootstrapStandardError:
         se_boot = self._compute_se(beta1_boot)
 
         return beta1_hat, se_boot, beta1_boot
-
     
 def get_bootstrap(beta0:float, beta1:float, sigma:float, N:int, B:int, useParallelism:bool=False):
 
+    np.random.seed(123)
+    
     bs = BootstrapStandardError(beta0, beta1, sigma, N)
 
     data = bs._simulate_data()
 
     logger.info("Dataset head:")
     logger.info("\n%s", data.head())
-
 
     if useParallelism: 
         beta1_hat, se_boot, beta1_boot = bs._bootstrap_beta_parallel(data, B)

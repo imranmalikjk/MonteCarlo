@@ -29,7 +29,7 @@ def run(json_input):
     print('Execution Time', round(time.time() - start,2),'secs')
 
     print("Beta1 predict: ", round(beta1_hat,2))
-    print("Standard Error of Beta1 Bootstrap: ", round(se_boot,3))
+    print("Standard Error of Beta1 Bootstrap: ", se_boot,4)
     print("Beta1 Bootstrap", beta1_boot)
 
 if __name__ == "__main__":
@@ -40,8 +40,8 @@ if __name__ == "__main__":
                 "beta1": 2,
                 "sigma": 1,
                 "N": 5000,
-                "B": 5000,
-                "useParallelism":False
+                "B": 1000,
+                "useParallelism":True
             }
         )
     )
