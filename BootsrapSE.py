@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
-
+import logging
+logging.basicConfig( level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s" ) 
+logger = logging.getLogger(__name__)
 from typing import Tuple
 from joblib import Parallel, delayed
 
@@ -40,7 +42,7 @@ class BootstrapStandardError:
             raise ValueError("N must be greater than 1")
         
     def _check_dataset(self, D:pd.DataFrame):
-        """Check is the DataFrame is correctly formatted
+        """Check if the DataFrame is correctly formatted
 
         Args:
             D (pd.DataFrame): (xi, yi) from a linear model
@@ -89,7 +91,7 @@ class BootstrapStandardError:
             beta1_boot (np.ndarray): Bootstrap's Beta1
 
         Returns:
-            float: Standard Error
+            float: Standard Error of Bootsrrap Beta1
         """
         B = len(beta1_boot)
         mean = np.mean(beta1_boot)
@@ -113,7 +115,7 @@ class BootstrapStandardError:
         beta1_boot = np.zeros(B)
 
         for b in range(B):
-            idx = np.random.choice(len(D),len(D),replace=True)
+            idx = np.random.choice(len(D),len(D),replace=True)  #bootstrap resampling with replacment
             D_b = D.iloc[idx, :]
             beta_b = self._estimate_beta(D_b)
             beta1_boot[b] = beta_b[1]
@@ -123,7 +125,8 @@ class BootstrapStandardError:
         return beta1_hat, se_boot, beta1_boot
     
     def single_bootstrap(self,D):
-        idx = np.random.choice(len(D),len(D),replace=True)
+        idx = np.random.choice(len(D),len(D),replace=True) #bootstrap resampling with replacment
+
         D_b = D.iloc[idx, :]
         return self._estimate_beta(D_b)[1]
         
@@ -156,8 +159,9 @@ def get_bootstrap(beta0:float, beta1:float, sigma:float, N:int, B:int, useParall
 
     data = bs._simulate_data()
 
-    print("Dataset head:")
-    print(data.head())
+    logger.info("Dataset head:")
+    logger.info("\n%s", data.head())
+
 
     if useParallelism: 
         beta1_hat, se_boot, beta1_boot = bs._bootstrap_beta_parallel(data, B)

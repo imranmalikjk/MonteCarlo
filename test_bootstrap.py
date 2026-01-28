@@ -120,7 +120,7 @@ def test_beta1_boot():
     bs = BootstrapStandardError(1, 2, 1, 1000)
     D = bs._simulate_data()
 
-    beta1_hat, _, beta1_boot = bs._bootstrap_beta(D, B=(500))
+    beta1_hat, _, beta1_boot = bs._bootstrap_beta(D, B=500)
 
     assert abs(np.mean(beta1_boot) - beta1_hat) < tolerance
 

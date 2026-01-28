@@ -2,6 +2,8 @@
 import json 
 from BootsrapSE import get_bootstrap
 
+import time 
+
 def run(json_input):
 
     args = json.loads(json_input) if json_input else dict()
@@ -10,8 +12,10 @@ def run(json_input):
     beta1 = args.get('beta1',2)
     sigma = args.get('sigma',1)
     N = args.get('N',10000)
-    B = args.get('B',1000)
+    B = args.get('B',5000)
     useParallelism = args.get('useParallelism', False)
+
+    start = time.time() 
 
     beta1_hat, se_boot, beta1_boot = get_bootstrap(
         beta0=beta0,
@@ -22,9 +26,11 @@ def run(json_input):
         useParallelism=useParallelism
     )
 
-    print("OLS estimate: : ", beta1_hat)
-    print("Bootstrap SE: ", se_boot)
-    print("beta1_boot", beta1_boot)
+    print('Execution Time', round(time.time() - start,2),'secs')
+
+    print("Beta1 predict: ", round(beta1_hat,2))
+    print("Standard Error of Beta1 Bootstrap: ", round(se_boot,3))
+    print("Beta1 Bootstrap", beta1_boot)
 
 if __name__ == "__main__":
     run(
@@ -33,9 +39,9 @@ if __name__ == "__main__":
                 "beta0": 0,
                 "beta1": 2,
                 "sigma": 1,
-                "N": 10000,
-                "B": 1000,
-                "useParallelism":True
+                "N": 5000,
+                "B": 5000,
+                "useParallelism":False
             }
         )
     )
